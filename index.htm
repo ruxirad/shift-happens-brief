@@ -144,7 +144,7 @@
         .next-btn:hover { background: #1DC2BB; color: #143250; border-color: #1DC2BB; transform: scale(1.05); }
 
         .body-large { font-size: clamp(15px, 1.6vw, 22px); line-height: 1.7; font-weight: 400; }
-        .hero-title { font-size: clamp(48px, 8vw, 140px); font-weight: 900; }
+        .hero-title { font-size: clamp(40px, 6.5vw, 100px); font-weight: 900; }
         .section-headline { font-size: clamp(40px, 5.5vw, 90px); font-weight: 700; }
 
         .sidebar-layout {
@@ -335,18 +335,21 @@
         <!-- SECTION 1: HERO -->
         <section class="pattern-bg" id="hero">
             <div class="text-center fade-in-up max-w-7xl">
-                <div class="space-y-3 mb-8">
+                <div class="space-y-2 mb-4">
                     <h1 class="hero-title text-white uppercase">SHIFT HAPPENS</h1>
-                    <p class="italic text-aqua font-bold" style="font-size: clamp(18px, 2.2vw, 34px);">Leading the Human Shift in the AI Era</p>
+                    <p class="italic text-aqua font-bold" style="font-size: clamp(16px, 1.8vw, 26px);">Leading the Human Shift in the AI Era</p>
                 </div>
-                <hr class="border-t border-white/10 w-48 mx-auto mb-8">
-                <h2 class="text-white mb-10" style="font-size: clamp(32px, 5vw, 75px); line-height: 1.2; font-weight: 700;">
+                <hr class="border-t border-white/10 w-48 mx-auto mb-4">
+                <h2 class="text-white mb-6" style="font-size: clamp(28px, 4.2vw, 62px); line-height: 1.2; font-weight: 700;">
                     Is it happening <span class="italic text-yellow font-bold">to</span> you — or <span class="italic text-yellow font-bold">through</span> you?
                 </h2>
-                <div class="mt-8">
-                   <p class="max-w-4xl mx-auto leading-relaxed italic font-light text-white" style="font-size: clamp(15px, 1.6vw, 24px); color: #E6E6E6;">
+                <div class="mt-4 flex flex-col items-center gap-8">
+                   <p class="max-w-4xl mx-auto leading-relaxed italic font-light text-white" style="font-size: clamp(14px, 1.3vw, 20px); color: #E6E6E6;">
                       As AI reshapes how work gets done, strategy sets direction and technology enables it—but transformation depends on how people move through it—and whether they can. That's the space Unify is built for.
                    </p>
+                   <button onclick="toggleVideo()" class="flex items-center gap-2 text-aqua hover:text-navy hover:bg-aqua transition-all font-bold uppercase tracking-[0.2em] text-xs md:text-sm border border-aqua/50 px-6 py-3 rounded-full">
+                       ▶ One minute. Worth it. 
+                   </button>
                 </div>
             </div>
             <button onclick="scrollToIndex(1)" class="next-btn">NEXT SECTION →</button>
@@ -675,21 +678,29 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="p-8 bg-white/5 border-t-2 border-aqua rounded-b-2xl">
-                        <p class="brand-label mb-4">WHAT WENT IN</p>
-                        <p class="text-white" style="font-size: clamp(15px, 1.5vw, 22px);">Built using only public Unify content. No client data or proprietary frameworks were used.</p>
+                        <p class="brand-label mb-4 text-xs">WHAT WENT IN</p>
+                        <p style="font-size: clamp(15px, 1.5vw, 22px);" class="text-white">Built using only public Unify content. No client data or proprietary frameworks were used.</p>
                     </div>
                     <div class="p-8 bg-white/5 border-t-2 border-aqua rounded-b-2xl">
-                        <p class="brand-label mb-4">WHERE THE LINE IS</p>
-                        <p class="text-white" style="font-size: clamp(15px, 1.5vw, 22px);">Any work involving client context must happen inside an enterprise-licensed environment.</p>
+                        <p class="brand-label mb-4 text-xs">WHERE THE LINE IS</p>
+                        <p style="font-size: clamp(15px, 1.5vw, 22px);" class="text-white">Any work involving client context must happen inside an enterprise-licensed environment.</p>
                     </div>
                     <div class="p-8 bg-white/5 border-t-2 border-aqua rounded-b-2xl">
-                        <p class="brand-label mb-4 text-aqua">WHAT THIS SIGNALS</p>
-                        <p class="text-white" style="font-size: clamp(15px, 1.5vw, 22px);">This Brief was built with AI — in natural language, no code, no agency. If we can do this for ourselves, we can do it for our clients.</p>
+                        <p class="brand-label mb-4 text-xs text-aqua">WHAT THIS SIGNALS</p>
+                        <p style="font-size: clamp(15px, 1.5vw, 22px);" class="text-white">This Brief was built with AI — in natural language, no code, no agency. If we can do this for ourselves, we can do it for our clients.</p>
                     </div>
                 </div>
-                <p class="mt-20 text-center brand-label opacity-30">© UNIFY CONSULTING · SHIFT HAPPENS</p>
+                <p class="mt-20 text-center brand-label text-[10px] opacity-30">© UNIFY CONSULTING · SHIFT HAPPENS</p>
             </div>
         </section>
+    </div>
+
+    <!-- Hidden Video Page / Overlay Placeholder -->
+    <div id="video-overlay" class="hidden fixed inset-0 z-[200] bg-[#0a0e1a] flex-col items-center justify-center p-4 md:p-8">
+        <button onclick="toggleVideo()" class="absolute top-6 right-6 md:top-10 md:right-10 text-white text-3xl md:text-4xl hover:text-aqua transition-colors z-50">✕</button>
+        <div class="w-full max-w-5xl aspect-video bg-navy border border-white/10 rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden relative">
+            <iframe id="intro-video" src="https://player.vimeo.com/video/1192007789?title=0&byline=0&portrait=0" class="w-full h-full relative z-10" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        </div>
     </div>
 
     <!-- Book 2 Modal -->
@@ -949,7 +960,20 @@
             renderCards(role);
         }
 
-        function toggleVideo() { const v = document.getElementById('intro-video'); v.classList.toggle('hidden'); if(!v.classList.contains('hidden')) v.play(); }
+        function toggleVideo() { 
+            const overlay = document.getElementById('video-overlay'); 
+            const v = document.getElementById('intro-video'); 
+            
+            if (overlay.classList.contains('hidden')) {
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+            } else {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+                if (v) { const src = v.src; v.src = src; } // Resets the iframe to stop video playback
+            }
+        }
+        
         window.onload = function() { renderCurve(); setRole('Business Development'); renderMeter(); };
         function nextCurve() { curveIndex = (curveIndex + 1) % DATA.stages.length; renderCurve(); }
         function prevCurve() { curveIndex = (curveIndex - 1 + DATA.stages.length) % DATA.stages.length; renderCurve(); }
