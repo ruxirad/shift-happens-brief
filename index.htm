@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Shift Happens // Unify Strategy Brief</title>
+    <!-- Montserrat Font Import -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,400;1,700&display=swap');
+    </style>
+    <!-- Tailwind for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Montserrat', 'sans-serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                        mono: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: '#143250',
+                        aqua: '#1DC2BB',
+                        yellow: '#FCED1E',
+                        'lt-gray': '#E6E6E6',
+                        'md-gray': '#C2C2C2',
+                        'dk-gray': '#69747C'
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --scale: 1;
+            --min-scale: 0.6;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background: #143250;
+            color: #FFFFFF;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .main-container {
+            height: 100vh;
+            height: 100dvh;
+            width: 100vw;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .main-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        section {
+            scroll-snap-align: start;
+            height: 100vh;
+            height: 100dvh;
+            width: 100vw;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(1rem, 2vh, 2rem) clamp(2rem, 4vw, 4rem);
+            background-color: #143250;
+        }
+
+        .pattern-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(29, 194, 187, 0.08) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+        
+        .pattern-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(20, 50, 80, 0.85) 0%, #143250 100%);
+            z-index: -1;
+        }
+
+        .fade-in-up { animation: fadeInUp 1s ease-out forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-dot {
+            width: clamp(9px, 0.85vw, 12px);
+            height: clamp(9px, 0.85vw, 12px);
+            background: #C2C2C2;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+        }
+        .nav-dot.active {
+            width: clamp(24px, 3.5vw, 48px);
+            background: #1DC2BB;
+        }
+
+        .brand-label {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            font-size: clamp(11px, 1vw, 15px);
+            color: #1DC2BB;
+            font-weight: 600;
+        }
+
+        .btn-primary { background-color: #1DC2BB; color: #143250; font-weight: 700; transition: all 0.3s ease; }
+        .btn-primary:hover { background-color: #FCED1E; }
+
+        .next-btn {
+            position: absolute;
+            bottom: 2.5rem;
+            right: 4rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(10px, 1vw, 14px);
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            color: #1DC2BB;
+            background: transparent;
+            border: 1px solid rgba(29, 194, 187, 0.4);
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            z-index: 100;
+        }
+        .next-btn:hover { background: #1DC2BB; color: #143250; border-color: #1DC2BB; transform: scale(1.05); }
+
+        .body-large { font-size: clamp(15px, 1.6vw, 22px); line-height: 1.7; font-weight: 400; }
+        .hero-title { font-size: clamp(48px, 8vw, 140px); font-weight: 900; }
+        .section-headline { font-size: clamp(40px, 5.5vw, 90px); font-weight: 700; }
+
+        .sidebar-layout {
+            display: grid;
+            grid-template-columns: clamp(200px, 20vw, 320px) 1fr;
+            gap: clamp(20px, 3vw, 48px);
+            width: 100%;
+            height: 100%;
+            align-items: center;
+        }
+
+        .move-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-top: 2px solid #1DC2BB;
+            border-radius: 0 0 1.5rem 1.5rem;
+            transition: all 0.4s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            height: clamp(220px, 28vh, 320px);
+        }
+        
+        .move-card.expanded { 
+            height: auto; 
+            min-height: fit-content; 
+            overflow: visible; 
+            background-color: rgba(255, 255, 255, 0.08); 
+            cursor: default; 
+        }
+
+        .move-card-expanded { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .move-card.expanded .move-card-expanded { display: block; opacity: 1; padding: clamp(1rem, 2vh, 2rem) 0; }
+        .move-card.expanded .move-card-collapsed { display: none; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-card {
+            background-color: #143250;
+            border-top: 4px solid #1DC2BB;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            border-radius: 1.5rem;
+            padding: clamp(2rem, 5vh, 60px);
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-card:hover {
+            border-color: #1DC2BB;
+            box-shadow: 0 0 20px rgba(29, 194, 187, 0.3);
+        }
+
+        .curve-svg-container { width: 100%; aspect-ratio: 21/9; max-height: 35vh; position: relative; }
+
+        /* =========================================
+           MOBILE OVERRIDES - FIXED ALIGNMENT
+           ========================================= */
+        @media (max-width: 768px) {
+            .main-container {
+                scroll-snap-type: none; 
+                overflow-x: hidden;
+            }
+            
+            section { 
+                min-height: 100dvh; 
+                height: auto; 
+                overflow-y: auto; 
+                padding: 6.5rem 1.25rem 4rem 1.25rem; 
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+
+            section > div:first-of-type { margin-top: auto; width: 100%; }
+            section > .next-btn { margin-bottom: auto; }
+
+            .sidebar-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+            
+            .hero-title { font-size: 3rem; line-height: 1.1; }
+            .section-headline { font-size: 2.25rem; }
+            
+            .next-btn { 
+                position: relative; 
+                right: auto; 
+                bottom: auto; 
+                margin-top: 3rem; 
+                width: 100%;
+                max-width: 300px;
+                align-self: center;
+                text-align: center;
+            }
+
+            .move-card { 
+                padding: 20px !important;
+                border-radius: 12px !important;
+                margin-bottom: 12px !important;
+                width: 100% !important;
+                min-height: 120px !important;
+                height: auto !important;
+                transition: all 0.4s ease !important;
+            }
+            .move-card.expanded { 
+                height: auto !important; 
+                min-height: fit-content !important;
+                overflow: visible !important;
+                max-height: none !important;
+            }
+            .move-card-collapsed { 
+                padding: 0 !important; 
+            }
+            .move-card-expanded { 
+                padding: 1rem 0 0 0 !important; 
+                overflow: visible !important; 
+                max-height: none !important; 
+            }
+
+            #curve-svg { height: auto; max-height: 250px; }
+            
+            .modal-card { padding: 2.5rem 1.25rem 2rem 1.25rem; }
+            .modal-card button { top: 1rem; right: 1rem; }
+            
+            #closing-cta { padding-top: 7rem; }
+        }
+    </style>
+</head>
+<body class="antialiased select-none">
+
+    <script>
+        (function() {
+          function applyScale() {
+            const baseWidth = 1920;
+            const baseHeight = 1080;
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                document.documentElement.style.setProperty('--scale', 1);
+                document.documentElement.style.fontSize = '14px';
+                return;
+            }
+            const scaleX = window.innerWidth / baseWidth;
+            const scaleY = window.innerHeight / baseHeight;
+            const scale = Math.min(scaleX, scaleY, 1);
+            const minScale = 0.6;
+            const finalScale = Math.max(scale, minScale);
+            document.documentElement.style.setProperty('--scale', finalScale);
+            document.documentElement.style.fontSize = (16 * finalScale) + 'px';
+          }
+          applyScale();
+          window.addEventListener('resize', applyScale);
+        })();
+    </script>
+
+    <nav class="fixed top-0 left-0 w-full z-50 p-4 md:p-6 flex justify-between items-center pointer-events-none bg-gradient-to-b from-navy/90 via-navy/60 to-transparent pb-8">
+        <div class="flex items-center gap-4 pointer-events-auto">
+            <div class="brand-logo-container">
+                <img src="https://www.unifyconsulting.com/wp-content/uploads/2022/04/unify-logo-1.svg" alt="Unify Logo" class="h-8 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <svg width="24" height="24" viewBox="0 0 120 120" fill="none" class="hidden">
+                    <circle cx="45" cy="45" r="32" stroke="#1DC2BB" stroke-width="5"/>
+                    <circle cx="75" cy="45" r="32" stroke="#1DC2BB" stroke-width="5"/>
+                    <circle cx="60" cy="73" r="32" stroke="#1DC2BB" stroke-width="5"/>
+                </svg>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="font-mono text-[11px] tracking-[0.2em] uppercase text-white/50" style="font-size: clamp(9px, 0.85vw, 12px);">Shift Happens // Brief v1.0</span>
+                <span class="text-white/20 font-light hidden md:inline">·</span>
+                <a href="https://www.unifyconsulting.com/shift-happens/" target="_blank" class="font-mono text-[11px] tracking-[0.2em] uppercase transition-colors text-white/50 hover:text-aqua hidden md:inline" style="font-size: clamp(9px, 0.85vw, 12px);">SHIFT HAPPENS SERIES ↗</a>
+            </div>
+        </div>
+        <div class="flex gap-4 pointer-events-auto items-center" id="nav-dots"></div>
+    </nav>
+
+    <div class="main-container" id="container">
+        
+        <!-- SECTION 1: HERO -->
+        <section class="pattern-bg" id="hero">
+            <div class="text-center fade-in-up max-w-7xl">
+                <div class="space-y-3 mb-8">
+                    <h1 class="hero-title text-white uppercase">SHIFT HAPPENS</h1>
+                    <p class="italic text-aqua font-bold" style="font-size: clamp(18px, 2.2vw, 34px);">Leading the Human Shift in the AI Era</p>
+                </div>
+                <hr class="border-t border-white/10 w-48 mx-auto mb-8">
+                <h2 class="text-white mb-10" style="font-size: clamp(32px, 5vw, 75px); line-height: 1.2; font-weight: 700;">
+                    Is it happening <span class="italic text-yellow font-bold">to</span> you — or <span class="italic text-yellow font-bold">through</span> you?
+                </h2>
+                <div class="mt-8">
+                   <p class="max-w-4xl mx-auto leading-relaxed italic font-light text-white" style="font-size: clamp(15px, 1.6vw, 24px); color: #E6E6E6;">
+                      As AI reshapes how work gets done, strategy sets direction and technology enables it—but transformation depends on how people move through it—and whether they can. That's the space Unify is built for.
+                   </p>
+                </div>
+            </div>
+            <button onclick="scrollToIndex(1)" class="next-btn">NEXT SECTION →</button>
+        </section>
+
+        <!-- SECTION 2: CHANGE CURVE -->
+        <section id="curve-section">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center w-full max-w-7xl mx-auto">
+                <div class="lg:col-span-4 flex flex-col gap-6">
+                  <div>
+                    <p class="brand-label mb-4">Framework 01</p>
+                    <h2 class="section-headline leading-[1.1] text-white">The Change Curve</h2>
+                  </div>
+                  <p class="body-large text-white" style="color: #E6E6E6;">
+                    Navigating transition isn't linear. It's a dip into performance loss before the climb to a new potential. Understanding where your team sits on the arc is the first step to leading through it.
+                  </p>
+                  <div class="flex gap-5 mt-4">
+                    <button onclick="prevCurve()" class="p-4 border border-aqua rounded-full hover:bg-yellow hover:border-yellow transition-colors group">
+                        <svg class="w-8 h-8 stroke-white group-hover:stroke-navy" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <button onclick="nextCurve()" class="p-4 border border-aqua rounded-full hover:bg-yellow hover:border-yellow transition-colors group">
+                        <svg class="w-8 h-8 stroke-white group-hover:stroke-navy" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="lg:col-span-8 space-y-4 md:space-y-8 w-full">
+                  <div class="curve-svg-container bg-white/5 rounded-3xl p-4 md:p-10 border border-white/10 shadow-sm flex items-center justify-center">
+                    <svg viewBox="0 0 1000 360" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" class="overflow-visible" id="curve-svg">
+                      <path d="M 100 200 C 200 50, 350 100, 420 190 C 480 270, 480 310, 500 310 C 550 310, 650 200, 780 140 C 900 80, 920 40, 920 40" fill="none" stroke="#C2C2C2" stroke-width="2" stroke-opacity="0.3" />
+                      <line x1="80" y1="340" x2="980" y2="340" stroke="#C2C2C2" stroke-opacity="0.1" stroke-dasharray="4 4" />
+                    </svg>
+                  </div>
+                  <div class="bg-navy border border-white/10 text-white p-6 md:p-10 rounded-3xl min-h-[200px] flex flex-col justify-center shadow-2xl" id="curve-info"></div>
+                </div>
+            </div>
+            <div class="hidden lg:block" style="position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: clamp(9px, 0.85vw, 12px); color: #C2C2C2; letter-spacing: 0.15em; text-transform: uppercase;">
+                Content distilled from the Shift Happens article series · Full articles at 
+                <a href="https://www.unifyconsulting.com/shift-happens/" target="_blank" style="color: rgba(29, 194, 187, 0.6); text-decoration: none; transition: all 0.3s ease;" onmouseover="this.style.color='#1DC2BB'; this.style.textDecoration='underline';" onmouseout="this.style.color='rgba(29, 194, 187, 0.6)'; this.style.textDecoration='none';">unifyconsulting.com/shift-happens</a>
+            </div>
+            <button onclick="scrollToIndex(2)" class="next-btn">NEXT SECTION →</button>
+        </section>
+
+        <!-- SECTION 3: THE SIGNAL -->
+        <section id="signal-section">
+            <div class="w-full max-w-7xl mx-auto flex flex-col justify-center h-full">
+                <div class="mb-12">
+                    <p class="brand-label mb-6">THE SIGNAL</p>
+                    <h2 class="section-headline leading-[1.1]">They're ready.<br><span class="italic text-aqua font-bold">They just don't know it yet.</span></h2>
+                    <p class="body-large uppercase mt-6" style="color: #E6E6E6;">Listen for these before you even mention the book.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-12 md:gap-y-16">
+                    <div>
+                        <blockquote class="font-bold italic text-white leading-tight" style="font-size: clamp(24px, 4vw, 56px);">"We've done this before and it didn't stick."</blockquote>
+                        <p class="font-bold tracking-widest uppercase mt-4" style="font-size: clamp(12px, 1.3vw, 18px); color: #C2C2C2;">→ this is a <span class="text-aqua">DEPRESSION</span> moment</p>
+                    </div>
+                    <div>
+                        <blockquote class="font-bold italic text-white leading-tight" style="font-size: clamp(24px, 4vw, 56px);">"People just aren't bought in."</blockquote>
+                        <p class="font-bold tracking-widest uppercase mt-4" style="font-size: clamp(12px, 1.3vw, 18px); color: #C2C2C2;">→ this is a <span class="text-aqua">DENIAL</span> moment</p>
+                    </div>
+                    <div>
+                        <blockquote class="font-bold italic text-white leading-tight" style="font-size: clamp(24px, 4vw, 56px);">"The tool is great but adoption is slow."</blockquote>
+                        <p class="font-bold tracking-widest uppercase mt-4" style="font-size: clamp(12px, 1.3vw, 18px); color: #C2C2C2;">→ this is a <span class="text-aqua">DECISION</span> moment</p>
+                    </div>
+                    <div>
+                        <blockquote class="font-bold italic text-white leading-tight" style="font-size: clamp(24px, 4vw, 56px);">"Leadership is aligned but the team isn't moving."</blockquote>
+                        <p class="font-bold tracking-widest uppercase mt-4" style="font-size: clamp(12px, 1.3vw, 18px); color: #C2C2C2;">→ this is a <span class="text-aqua">FRUSTRATION</span> moment</p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="scrollToIndex(3)" class="next-btn">NEXT SECTION →</button>
+        </section>
+
+        <!-- SECTION 4: WHEN YOU HEAR IT -->
+        <section class="pattern-bg" id="share-section">
+            <div class="w-full h-full max-w-7xl mx-auto sidebar-layout">
+                <div class="flex flex-col justify-center">
+                  <h2 class="font-bold leading-tight mb-4 text-white" style="font-size: clamp(32px, 5vw, 72px);">When you hear it, <span class="italic text-aqua font-bold">share it.</span></h2>
+                  <p class="brand-label mb-10">Filter by role to find your on-ramp.</p>
+                  <div class="flex flex-col gap-4">
+                    <button onclick="setRole('Business Development')" class="role-btn px-8 py-3 rounded-xl border transition-all duration-300 font-bold btn-primary text-left">Business Development</button>
+                    <button onclick="setRole('Account Manager')" class="role-btn px-8 py-3 rounded-xl border transition-all duration-300 font-bold btn-secondary text-left">Account Manager</button>
+                    <button onclick="setRole('Consultant')" class="role-btn px-8 py-3 rounded-xl border transition-all duration-300 font-bold btn-secondary text-left">Consultant</button>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="cards-container"></div>
+            </div>
+            <button onclick="scrollToIndex(4)" class="next-btn">NEXT SECTION →</button>
+        </section>
+
+        <!-- SECTION 5: THE MOVE -->
+        <section id="the-move-section" style="align-items: flex-start;">
+            <div class="w-full max-w-[100rem] mx-auto flex flex-col justify-center min-h-full py-8 md:py-0">
+                <div class="mb-8 md:mb-12 mt-4 md:mt-0">
+                    <p class="brand-label mb-6">THE MOVE - THE CONSULTANT LENS</p>
+                    <h2 class="section-headline leading-[1.1] text-white">Three tools.<br><span class="italic text-aqua font-bold">One conversation.</span></h2>
+                    <p style="font-family: Montserrat, sans-serif; font-size: clamp(10px, 0.9vw, 13px); font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: #C2C2C2; margin-top: 12px;">Click each to expand.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 items-start" id="the-move-cards">
+                    
+                    <!-- CARD 01: Diagnose it -->
+                    <div class="move-card" id="move-card-0" onclick="expandMoveCard(0)">
+                        <div class="move-card-collapsed p-8 flex flex-col h-full justify-between">
+                            <div>
+                                <span class="text-yellow font-bold leading-none mb-4 block" style="font-size: clamp(36px, 5vw, 80px);">01</span>
+                                <h3 class="font-bold text-white leading-tight mb-2" style="font-size: clamp(20px, 2.5vw, 38px);">Diagnose it</h3>
+                                <p style="font-size: clamp(11px, 1.3vw, 18px); color: #C2C2C2;">Before you share anything.</p>
+                            </div>
+                            <p class="text-aqua uppercase tracking-widest text-[13px] font-bold mt-auto pt-8">TAP TO EXPAND →</p>
+                        </div>
+                        <div class="move-card-expanded px-8 overflow-y-auto no-scrollbar">
+                            <div class="space-y-8 pb-4">
+                                <div>
+                                    <p class="brand-label mb-2">THREE WEEKS IN</p>
+                                    <p class="text-white mb-3" style="font-size: clamp(14px, 1.5vw, 22px);">Adoption is stalling. People are compliant but not committed. You're watching a DECISION moment play out in real time — someone protecting their competence, not resisting the tool.</p>
+                                    <p class="text-dk-gray text-xs font-bold tracking-widest uppercase">→ READ: THE REAL REASON CHANGE FAILS</p>
+                                </div>
+                                <div>
+                                    <p class="brand-label mb-2">KICKOFF WEEK</p>
+                                    <p class="text-white mb-3" style="font-size: clamp(14px, 1.5vw, 22px);">Leadership is aligned. The team is nodding. Nobody is asking questions. That silence isn't agreement — it's a DENIAL moment. The disconnect hasn't surfaced yet.</p>
+                                    <p class="text-dk-gray text-xs font-bold tracking-widest uppercase">→ READ: WE WERE HIRED TO BE PEOPLE'S PEOPLE</p>
+                                </div>
+                                <div>
+                                    <p class="brand-label mb-2">MID-ENGAGEMENT</p>
+                                    <p class="text-white mb-3" style="font-size: clamp(14px, 1.5vw, 22px);">The change was communicated three times. It still isn't landing. This isn't a communication problem — it's a translation problem. That's a DEPRESSION moment.</p>
+                                    <p class="text-dk-gray text-xs font-bold tracking-widest uppercase">→ READ: IT SHOULD BE EASY — SO WHY ARE WE FIGHTING IT?</p>
+                                </div>
+                                <p class="text-aqua uppercase tracking-widest text-[13px] font-bold mt-8 border-t border-white/10 pt-4 cursor-pointer">TAP TO COLLAPSE ↑</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 02: Say it -->
+                    <div class="move-card" id="move-card-1" onclick="expandMoveCard(1)">
+                        <div class="move-card-collapsed p-8 flex flex-col h-full justify-between">
+                            <div>
+                                <span class="text-yellow font-bold leading-none mb-4 block" style="font-size: clamp(36px, 5vw, 80px);">02</span>
+                                <h3 class="font-bold text-white leading-tight mb-2" style="font-size: clamp(20px, 2.5vw, 38px);">Say it</h3>
+                                <p style="font-size: clamp(11px, 1.3vw, 18px); color: #C2C2C2;">The literal sentence. Word for word.</p>
+                            </div>
+                            <p class="text-aqua uppercase tracking-widest text-[13px] font-bold mt-auto pt-8">TAP TO EXPAND →</p>
+                        </div>
+                        <div class="move-card-expanded px-8 overflow-y-auto no-scrollbar">
+                            <div class="space-y-8 pb-4">
+                                <div>
+                                    <p class="brand-label mb-2">BUSINESS DEVELOPMENT</p>
+                                    <p class="italic font-bold text-white mb-3" style="font-size: clamp(14px, 1.5vw, 22px);">"We actually wrote something about exactly that — one of our consultants lived through this with a client. Want me to send it over?"</p>
+                                    <p class="text-dk-gray text-[13px]">Use when a prospect describes a stalled rollout or resistant team.</p>
+                                </div>
+                                <div>
+                                    <p class="brand-label mb-2">ACCOUNT MANAGER</p>
+                                    <p class="italic font-bold text-white mb-3" style="font-size: clamp(14px, 1.5vw, 22px);">"There's a specific article on this. Took us about 5 minutes to read — might reframe how you're thinking about the rollout. Can I send it?"</p>
+                                    <p class="text-dk-gray text-[13px]">Use when an existing client surfaces adoption frustration mid-engagement.</p>
+                                </div>
+                                <div>
+                                    <p class="brand-label mb-2">CONSULTANT</p>
+                                    <p class="italic font-bold text-white mb-3" style="font-size: clamp(14px, 1.5vw, 22px);">"I've seen this pattern before — we actually wrote about it. It's not a pitch, it's just honest. Worth a read if this keeps coming up."</p>
+                                    <p class="text-dk-gray text-[13px]">Use when you recognize a Kübler-Ross moment happening in a client meeting.</p>
+                                </div>
+                                <p class="text-aqua uppercase tracking-widest text-[13px] font-bold mt-8 border-t border-white/10 pt-4 cursor-pointer">TAP TO COLLAPSE ↑</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 03: Frame it -->
+                    <div class="move-card" id="move-card-2" onclick="expandMoveCard(2)">
+                        <div class="move-card-collapsed p-8 flex flex-col h-full justify-between">
+                            <div>
+                                <span class="text-yellow font-bold leading-none mb-4 block" style="font-size: clamp(36px, 5vw, 80px);">03</span>
+                                <h3 class="font-bold text-white leading-tight mb-2" style="font-size: clamp(20px, 2.5vw, 38px);">Frame it</h3>
+                                <p style="font-size: clamp(11px, 1.3vw, 18px); color: #C2C2C2;">Not what you say. How you say it.</p>
+                            </div>
+                            <p class="text-aqua uppercase tracking-widest text-[13px] font-bold mt-auto pt-8">TAP TO EXPAND →</p>
+                        </div>
+                        <div class="move-card-expanded px-8 overflow-y-auto no-scrollbar">
+                            <div class="flex flex-col pb-4">
+                                
+                                <div class="hidden md:grid grid-cols-2 gap-4 border-b border-white/10 pb-4 mb-6">
+                                    <p class="text-dk-gray uppercase tracking-widest font-bold" style="font-size: clamp(11px, 1vw, 15px);">THE INSTINCT</p>
+                                    <p class="text-aqua uppercase tracking-widest font-bold" style="font-size: clamp(11px, 1vw, 15px);">THE MOVE</p>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 mb-8">
+                                    <div>
+                                        <p class="text-dk-gray uppercase tracking-widest font-bold md:hidden mb-1" style="font-size: clamp(11px, 1vw, 15px);">THE INSTINCT</p>
+                                        <p class="text-dk-gray" style="font-size: clamp(14px, 1.5vw, 22px);">→ "We wrote an ebook about change management."</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-aqua uppercase tracking-widest font-bold md:hidden mb-1 mt-4" style="font-size: clamp(11px, 1vw, 15px);">THE MOVE</p>
+                                        <p class="italic font-bold text-white" style="font-size: clamp(14px, 1.5vw, 22px);">"One of our consultants wrote about why smart people resist simple changes — it's a quick read and it's exactly what you're describing."</p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 mb-8">
+                                    <div>
+                                        <p class="text-dk-gray uppercase tracking-widest font-bold md:hidden mb-1" style="font-size: clamp(11px, 1vw, 15px);">THE INSTINCT</p>
+                                        <p class="text-dk-gray" style="font-size: clamp(14px, 1.5vw, 22px);">→ "Check out our Shift Happens series."</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-aqua uppercase tracking-widest font-bold md:hidden mb-1 mt-4" style="font-size: clamp(11px, 1vw, 15px);">THE MOVE</p>
+                                        <p class="italic font-bold text-white" style="font-size: clamp(14px, 1.5vw, 22px);">"There's a specific article on this — takes 5 minutes, might reframe how you're thinking about the rollout."</p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 mb-4">
+                                    <div>
+                                        <p class="text-dk-gray uppercase tracking-widest font-bold md:hidden mb-1" style="font-size: clamp(11px, 1vw, 15px);">THE INSTINCT</p>
+                                        <p class="text-dk-gray" style="font-size: clamp(14px, 1.5vw, 22px);">→ "We have research on this topic."</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-aqua uppercase tracking-widest font-bold md:hidden mb-1 mt-4" style="font-size: clamp(11px, 1vw, 15px);">THE MOVE</p>
+                                        <p class="italic font-bold text-white" style="font-size: clamp(14px, 1.5vw, 22px);">"We've seen this pattern enough times that someone wrote it down. Want the short version?"</p>
+                                    </div>
+                                </div>
+
+                                <p class="text-aqua uppercase tracking-widest text-[13px] font-bold mt-8 border-t border-white/10 pt-4 cursor-pointer">TAP TO COLLAPSE ↑</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <button onclick="scrollToIndex(5)" class="next-btn">NEXT SECTION →</button>
+        </section>
+
+        <!-- SECTION 6: THE ALL-IN-METER -->
+        <section id="meter-section">
+            <div class="max-w-6xl mx-auto w-full py-4 mt-8 md:mt-0">
+                <div class="mb-8">
+                  <p class="brand-label mb-4">THE ALL-IN-METER</p>
+                  <h2 class="font-bold text-5xl md:text-6xl mb-4 text-white">How <span class="italic text-aqua font-bold">ENGAGED</span> do you want to be?</h2>
+                </div>
+                <div class="relative mb-8">
+                  <div class="h-2 w-full bg-gradient-to-r from-md-gray to-aqua rounded-full"></div>
+                  <div class="flex justify-between mt-4 font-mono text-[10px] md:text-[13px] tracking-[0.2em] md:tracking-[0.3em] uppercase text-white" style="color: #C2C2C2;">
+                    <span>PASSIVE</span><span>ACTIVE</span><span>DIRECT</span><span>POWER MOVE</span>
+                  </div>
+                </div>
+                <div class="space-y-0 border-t border-white/10 mt-4 md:mt-0" id="meter-container"></div>
+                <div class="mt-8 text-center">
+                    <button onclick="decideForMe()" class="btn-primary px-12 py-4 rounded-xl font-bold tracking-widest w-full md:w-auto">DECIDE FOR ME →</button>
+                </div>
+            </div>
+            <button onclick="scrollToIndex(6)" class="next-btn text-aqua">NEXT SECTION →</button>
+        </section>
+
+        <!-- SECTION 7: CLOSING CTA -->
+        <section id="closing-cta" class="bg-[#0a0e1a]">
+            <div class="w-full max-w-7xl mx-auto flex flex-col justify-center items-center h-full">
+                <div class="text-center" style="margin-bottom: 2vh;">
+                    <div class="brand-logo-container justify-center mb-2 flex">
+                        <img src="https://www.unifyconsulting.com/wp-content/uploads/2022/04/unify-logo-1.svg" alt="Unify Logo" style="height: 44px; width: auto;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <svg width="44" height="44" viewBox="0 0 120 120" fill="none" class="hidden mx-auto">
+                            <circle cx="45" cy="45" r="32" stroke="#1DC2BB" stroke-width="5"/>
+                            <circle cx="75" cy="45" r="32" stroke="#1DC2BB" stroke-width="5"/>
+                            <circle cx="60" cy="73" r="32" stroke="#1DC2BB" stroke-width="5"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <h2 class="font-bold text-white text-center mb-10" style="font-size: clamp(36px, 5vw, 80px); line-height: 1.1;">
+                    Shift happens. What are you doing <span class="italic text-aqua font-bold">about it?</span>
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" style="max-width: min(850px, 85vw); width: 100%;">
+                    <a href="https://www.unifyconsulting.com/shift-happens/" target="_blank" class="cta-card bg-navy border border-white/10 rounded-2xl flex flex-col items-center justify-center text-center p-6 transition-all">
+                        <img 
+                          src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.unifyconsulting.com/shift-happens/"
+                          alt="QR code for Shift Happens ebook"
+                          style="
+                            width: 140px;
+                            height: 140px;
+                            border-radius: 8px;
+                            background: white;
+                            padding: 8px;
+                            margin-bottom: 0.5rem;
+                          "
+                        />
+                        <p class="brand-label" style="font-size: clamp(11px, 1vw, 15px); color: #C2C2C2;">SCAN FOR SHIFT HAPPENS SERIES</p>
+                    </a>
+                    
+                    <a href="https://www.unifyconsulting.com/ebook-download-leading-the-human-shift-in-the-ai-era/?%3E" target="_blank" class="cta-card bg-navy border border-white/10 rounded-2xl flex flex-col justify-between p-6 transition-all">
+                        <div>
+                            <p class="brand-label mb-2" style="color: #C2C2C2;">NEXT STEP</p>
+                            <h3 class="font-bold text-white" style="font-size: clamp(18px, 2.2vw, 30px);">Get the ebook</h3>
+                            <p style="color: #E6E6E6; font-size: clamp(13px, 1.2vw, 17px);">Download the full series read.</p>
+                        </div>
+                        <p class="brand-label text-aqua mt-4">OPEN →</p>
+                    </a>
+
+                    <div onclick="openModal('book2-modal')" class="cta-card bg-navy border border-white/10 rounded-2xl flex flex-col justify-between p-6 transition-all cursor-pointer">
+                        <div>
+                            <p class="brand-label mb-2" style="color: #C2C2C2;">NEXT STEP</p>
+                            <h3 class="font-bold text-white" style="font-size: clamp(18px, 2.2vw, 30px);">Book 2 — teaser</h3>
+                            <p style="color: #E6E6E6; font-size: clamp(13px, 1.2vw, 17px);">A first look at what's coming next.</p>
+                        </div>
+                        <p class="brand-label text-aqua mt-4">OPEN →</p>
+                    </div>
+
+                    <a href="https://www.unifyconsulting.com/contact/" target="_blank" class="cta-card bg-navy border border-white/10 rounded-2xl flex flex-col justify-between p-6 transition-all">
+                        <div>
+                            <p class="brand-label mb-2" style="color: #C2C2C2;">NEXT STEP</p>
+                            <h3 class="font-bold text-white" style="font-size: clamp(18px, 2.2vw, 30px);">Get in touch</h3>
+                            <p style="color: #E6E6E6; font-size: clamp(13px, 1.2vw, 17px);">Start a transformation conversation.</p>
+                        </div>
+                        <p class="brand-label text-aqua mt-4">OPEN →</p>
+                    </a>
+                </div>
+            </div>
+            <button onclick="scrollToIndex(7)" class="next-btn">BEFORE YOU GO →</button>
+        </section>
+
+        <!-- SECTION 8: RESPONSIBLE AI (FINAL PAGE) -->
+        <section class="pattern-bg" id="responsible-ai">
+            <div class="w-full max-w-7xl mx-auto flex flex-col justify-center h-full">
+                <div class="mb-12 flex flex-col gap-6">
+                    <div class="flex items-center gap-3">
+                        <img src="https://www.unifyconsulting.com/wp-content/uploads/2022/04/unify-logo-1.svg" alt="Unify Logo" class="h-10 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <svg width="40" height="40" viewBox="0 0 120 120" fill="none" class="hidden">
+                            <circle cx="45" cy="45" r="32" stroke="#1DC2BB" stroke-width="5"/>
+                            <circle cx="75" cy="45" r="32" stroke="#1DC2BB" stroke-width="5"/>
+                            <circle cx="60" cy="73" r="32" stroke="#1DC2BB" stroke-width="5"/>
+                        </svg>
+                    </div>
+                    <p class="brand-label" style="color: #C2C2C2;">A NOTE ON RESPONSIBLE AI</p>
+                    <h2 class="font-bold text-white" style="font-size: clamp(36px, 5.5vw, 90px); line-height: 1.1;">Built responsibly.<br><span class="italic text-aqua font-bold">Here's what that means.</span></h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-8 bg-white/5 border-t-2 border-aqua rounded-b-2xl">
+                        <p class="brand-label mb-4">WHAT WENT IN</p>
+                        <p class="text-white" style="font-size: clamp(15px, 1.5vw, 22px);">Built using only public Unify content. No client data or proprietary frameworks were used.</p>
+                    </div>
+                    <div class="p-8 bg-white/5 border-t-2 border-aqua rounded-b-2xl">
+                        <p class="brand-label mb-4">WHERE THE LINE IS</p>
+                        <p class="text-white" style="font-size: clamp(15px, 1.5vw, 22px);">Any work involving client context must happen inside an enterprise-licensed environment.</p>
+                    </div>
+                    <div class="p-8 bg-white/5 border-t-2 border-aqua rounded-b-2xl">
+                        <p class="brand-label mb-4 text-aqua">WHAT THIS SIGNALS</p>
+                        <p class="text-white" style="font-size: clamp(15px, 1.5vw, 22px);">This Brief was built with AI — in natural language, no code, no agency. If we can do this for ourselves, we can do it for our clients.</p>
+                    </div>
+                </div>
+                <p class="mt-20 text-center brand-label opacity-30">© UNIFY CONSULTING · SHIFT HAPPENS</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Book 2 Modal -->
+    <div id="book2-modal" class="modal-overlay" onclick="closeModal('book2-modal')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button onclick="closeModal('book2-modal')" class="absolute top-8 right-8 text-white text-3xl hover:text-aqua transition-colors">✕</button>
+            <p class="brand-label mb-4" style="color: #C2C2C2;">COMING NEXT</p>
+            <h3 class="text-white font-bold leading-tight mb-4" style="font-size: clamp(24px, 3.5vw, 48px);">Change Management Demystified</h3>
+            <p class="text-aqua italic font-bold mb-8" style="font-size: clamp(13px, 1.6vw, 22px);">The discipline. The traps. The tools. The AI challenge.</p>
+            <hr class="border-aqua/30 w-full mb-8">
+            <p class="text-white leading-[1.8]" style="font-size: clamp(12px, 1.4vw, 20px);">Book 2 goes deeper into the mechanics. We demystify the frameworks and the AI-specific challenges leaders face when change management meets the cognitive economy.</p>
+            <p class="text-center brand-label mt-12" style="font-size: 11px; color: #C2C2C2;">RELEASE DATE COMING SOON</p>
+        </div>
+    </div>
+
+    <!-- All-In-Meter Action Modal -->
+    <div id="meter-modal" class="modal-overlay" onclick="closeModal('meter-modal')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button onclick="closeModal('meter-modal')" class="absolute top-8 right-8 text-white text-2xl hover:text-aqua transition-colors">✕</button>
+            <p class="brand-label mb-4" id="modal-level-label">YOUR ACTION PLAN</p>
+            <h3 class="text-white font-bold text-3xl mb-4" id="modal-item-title"></h3>
+            <p class="text-aqua italic font-bold mb-8 text-xl" id="modal-item-prompt"></p>
+            <div id="modal-steps-content"></div>
+            <p class="text-center brand-label mt-12 opacity-40">CLICK ANYWHERE TO COLLAPSE</p>
+        </div>
+    </div>
+
+    <script>
+        const DATA = {
+            stages: [
+                { name: 'Shock', truth: "Change can be exhausting. It forces people out of comfortable routine into the disorienting world of the unknown. The discomfort isn't a sign something is broken — it means something is new.", author: 'Matt Hollen', articleTitle: "Shift Happens, Daily. Is It Happening To You or Through You?", x: 100, y: 200 },
+                { name: 'Denial', truth: "Most transformations don't fail because of bad frameworks — they fail because of human disconnection. People don't resist change. They resist feeling alone in it.", author: 'Ruxi Raduta', articleTitle: "We Were Hired to Be People's People", x: 300, y: 100 },
+                { name: 'Frustration', truth: "We've reached the limit of what 'trying harder' can do. You can't solve a systemic crisis with individual heroic effort. Stop adding. Start pruning.", author: 'Matt Hollen', articleTitle: "From Overwhelmed to Just 'Whelmed'", x: 420, y: 190 },
+                { name: 'Depression', truth: "The change was communicated — but it wasn't translated. People didn't resist the tool. They resisted the ambiguity around it.", author: 'Ruxi Raduta', articleTitle: "It Should Be Easy — So Why Are We Fighting It?", x: 500, y: 310 },
+                { name: 'Experimentation', truth: "AI doesn't fix dysfunction — it multiplies it. AI readiness is people readiness.", author: 'Chris Lewis', articleTitle: 'The Human Variable', x: 600, y: 230 },
+                { name: 'Decision', truth: "Most resistance isn't defiance. It's someone protecting the only thing they've built over a career: the sense that they're good at what they do. Make it safe to be temporarily bad at something.", author: 'Ruxi Raduta', articleTitle: 'The Real Reason Change Fails', x: 780, y: 140 },
+                { name: 'Integration', truth: "Transmission is not the same as alignment. Sometimes the most empathetic thing you can do isn't to say more — it's to slow down and make sure you're actually being heard.", author: 'Ruxi Raduta', articleTitle: 'Empathy Without Structure Is Just Assumption', x: 920, y: 40 }
+            ],
+            shareCards: {
+                "Business Development": { prefix: "WHEN YOU HEAR", cards: [
+                    { quote: "Our teams don't adopt new tools...", article: "Shift Happens, Daily", hook: "Change can be exhausting.", thenAsk: "Is that friction happening at the people level or the process level?" },
+                    { quote: "We've done training but it's not sticking...", article: "We Were Hired to Be People's People", hook: "People resist feeling alone.", thenAsk: "When you say not sticking — is it a skill gap or a safety gap?" },
+                    { quote: "We're already spending on change management...", article: "The Real Reason Change Fails", hook: "Competence protection in action.", thenAsk: "Is that investment sitting inside the project budget or separate from it?" },
+                    { quote: "We're rolling out AI tools next quarter...", article: "The Human Variable", hook: "AI multiplies dysfunction.", thenAsk: "How are you thinking about the identity shift for the people whose roles change most?" }
+                ]},
+                "Account Manager": { prefix: "WHEN YOU HEAR", cards: [
+                    { quote: "The client seems stuck after go-live...", article: "It Should Be Easy", hook: "Communication isn't translation.", thenAsk: "Are we seeing friction with the technology itself or the change in workflow?" },
+                    { quote: "The team just seems burned out...", article: "From Overwhelmed to Just 'Whelmed'", hook: "Stop adding. Start pruning.", thenAsk: "Is the pressure coming from the volume of work or the lack of clear prioritization?" },
+                    { quote: "Communications went out but nothing changed...", article: "Empathy Without Structure", hook: "Transmission is not alignment.", thenAsk: "Did the message reach them, or did it actually land with them?" },
+                    { quote: "Leadership said yes but middle managers aren't moving...", article: "The Real Reason Change Fails", hook: "Competence protection in action.", thenAsk: "What is the specific risk they feel they are taking by leaning into this?" }
+                ]},
+                "Consultant": { prefix: "WHEN YOU SEE", cards: [
+                    { quote: "Low survey scores despite high leadership support", article: "We Were Hired to Be People's People", hook: "People resist feeling alone.", thenAsk: "Where is the psychological safety breaking down in the feedback loop?" },
+                    { quote: "High change load with no prioritization in place", article: "From Overwhelmed to Just 'Whelmed'", hook: "Stop adding. Start pruning.", thenAsk: "Which legacy behaviors are we still rewarding while asking for new ones?" },
+                    { quote: "Experts going silent in working sessions", article: "The Real Reason Change Fails", hook: "Competence protection in action.", thenAsk: "Does this change threaten their status as the go-to person for the old way?" },
+                    { quote: "AI rollout with minimal people strategy", article: "The Human Variable", hook: "AI multiplies dysfunction.", thenAsk: "Are we automating the past or enabling the future workforce?" }
+                ]}
+            },
+            meter: [
+                { id: "01", title: "Like our post", description: "Takes 2 seconds. Signals to the algorithm.", level: "PASSIVE", color: "bg-lt-gray text-dk-gray", prompt: "Which article title made you pause? Start there.", steps: ["Open LinkedIn right now — don't wait until later", "Find the Shift Happens post pinned on the Unify page", "Like it and leave one word in the comments — that's enough to start"] },
+                { id: "02", title: "Repost with your voice", description: "Add one sentence from your own experience.", level: "ACTIVE", color: "bg-aqua/30 text-aqua", prompt: "What's one moment from work this week this article explains?", steps: ["Pick one article that matches something you've seen recently on a client", "Write one sentence from your own experience — not a summary, your take", "Repost the Unify article with that sentence above it. Tag Unify Consulting."] },
+                { id: "03", title: "Write your own response", description: "Agree, disagree, add a case study.", level: "ACTIVE", color: "bg-aqua/30 text-aqua", prompt: "What would you disagree with — or add to?", steps: ["Pick the article that triggered a reaction — agreement or disagreement", "Write 3-5 sentences: what you'd add, push back on, or have seen differently", "Post it, reference the Shift Happens series, and tag the author"] },
+                { id: "04", title: "Email it to a client", description: "Warm touch. 'Saw this and thought of you.'", level: "DIRECT", color: "bg-aqua/60 text-white", prompt: "Which client came to mind when you read this?", steps: ["Pick one client and one article that matches their current pain", "Write 2 sentences max: 'Saw this and thought of your situation. Worth 5 minutes.'", "Send it today — not this week, today. No pitch needed."] },
+                { id: "05", title: "Host a lunch & learn", description: "The power move. Convene your clients.", level: "DIRECT", color: "bg-aqua/60 text-white", prompt: "Which account would benefit most?", steps: ["Identify one account where change or AI adoption is currently a pain point", "Book 30 minutes with your account lead this week — show them this Brief", "Propose a client-facing version of this session. We'll help you build it."] },
+                { id: "06", title: "Reference in a proposal", description: "Bring it into a client meeting.", level: "POWER MOVE", color: "bg-yellow text-navy", prompt: "Where in your pipeline could this reframe a conversation?", steps: ["Open your current proposal or QBR deck", "Find the section where you address adoption, change, or AI readiness", "Add one sentence referencing the Shift Happens research and link to the ebook. That's a power move."] }
+            ]
+        };
+
+        let activeIndex = 0;
+        let curveIndex = 0;
+        let expandedMoveCard = null; 
+        const totalSlides = 8; 
+        const container = document.getElementById('container');
+        const dotsContainer = document.getElementById('nav-dots');
+
+        function scrollToIndex(index) {
+            if (index < 0 || index >= totalSlides) return;
+            if (window.innerWidth <= 768) {
+                const sections = document.querySelectorAll('section');
+                if (sections[index]) {
+                    sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } else {
+                container.scrollTo({ top: index * window.innerHeight, behavior: 'smooth' });
+            }
+        }
+
+        function renderMeter() {
+            const meterContainer = document.getElementById('meter-container'); 
+            meterContainer.innerHTML = '';
+            DATA.meter.forEach(function(item, idx) {
+                const div = document.createElement('div'); div.id = 'meter-item-' + idx;
+                div.className = "group grid grid-cols-1 md:grid-cols-[60px_1fr_auto] items-center py-4 px-4 md:px-8 border-b border-white/10 hover:bg-white/5 transition-all relative cursor-pointer gap-2 md:gap-0";
+                div.onclick = () => showMeterAction(idx);
+                div.innerHTML = `<span class="text-xl font-bold font-mono text-md-gray group-hover:text-white transition-colors">${item.id}</span><div class="pr-4 md:pr-12"><h3 class="font-bold mb-1 text-white" style="font-size: clamp(18px, 1.8vw, 26px);">${item.title}</h3><p class="opacity-60 text-white" style="font-size: clamp(14px, 1.3vw, 19px);">${item.description}</p></div><div class="mt-2 md:mt-0"><span class="px-3 md:px-6 py-2 rounded font-bold uppercase text-[10px] ${item.level === 'POWER MOVE' ? 'bg-yellow text-navy' : 'bg-aqua/20 text-aqua'}">${item.level}</span></div>`;
+                meterContainer.appendChild(div);
+            });
+        }
+
+        function decideForMe() {
+            const randomIndex = Math.floor(Math.random() * DATA.meter.length);
+            showMeterAction(randomIndex);
+        }
+
+        function showMeterAction(idx) {
+            const item = DATA.meter[idx];
+            document.getElementById('modal-item-title').textContent = item.title;
+            document.getElementById('modal-item-prompt').textContent = item.prompt;
+            document.getElementById('modal-level-label').textContent = item.level + ' ACTION PLAN';
+            
+            const stepsHtml = item.steps.map((s, i) => `
+                <div class="flex gap-4 items-start border-b border-white/5 py-4">
+                    <span class="text-aqua font-bold">0${i+1} →</span>
+                    <span class="text-white text-lg">${s}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('modal-steps-content').innerHTML = `
+                <div class="mt-8 border-t border-aqua/30 pt-6">
+                    <p class="brand-label mb-4">YOUR NEXT 3 STEPS</p>
+                    <div class="bg-black/20 p-4 rounded-xl">${stepsHtml}</div>
+                </div>
+            `;
+            openModal('meter-modal');
+        }
+
+        function expandMoveCard(index) {
+            if (expandedMoveCard === index) { collapseAllMoveCards(); } 
+            else { 
+                collapseAllMoveCards(); expandedMoveCard = index; 
+                const card = document.getElementById('move-card-' + index);
+                if (card) card.classList.add('expanded');
+            }
+        }
+
+        function collapseAllMoveCards() {
+            [0, 1, 2].forEach(i => {
+                const card = document.getElementById('move-card-' + i);
+                if (card) card.classList.remove('expanded');
+            });
+            expandedMoveCard = null;
+        }
+
+        function openModal(id) {
+            const m = document.getElementById(id);
+            m.style.display = 'flex';
+            setTimeout(() => m.classList.add('active'), 10);
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            m.classList.remove('active');
+            setTimeout(() => m.style.display = 'none', 300);
+        }
+
+        document.addEventListener('click', function(e) {
+            if (expandedMoveCard !== null && !document.getElementById('the-move-cards').contains(e.target)) {
+                collapseAllMoveCards();
+            }
+        });
+
+        // Setup dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = "nav-dot" + (i === 0 ? " active" : "");
+            dot.onclick = () => scrollToIndex(i);
+            dotsContainer.appendChild(dot);
+        }
+
+        container.addEventListener('scroll', function() {
+            let newIndex = activeIndex;
+            
+            if (window.innerWidth <= 768) {
+                const sections = document.querySelectorAll('section');
+                sections.forEach((sec, i) => {
+                    if (sec.getBoundingClientRect().top <= window.innerHeight * 0.3) {
+                        newIndex = i;
+                    }
+                });
+            } else {
+                newIndex = Math.round(container.scrollTop / window.innerHeight);
+            }
+
+            if (newIndex !== activeIndex) {
+                activeIndex = newIndex;
+                const dots = document.querySelectorAll('.nav-dot');
+                dots.forEach((d, i) => d.classList.toggle('active', i === activeIndex));
+            }
+        });
+
+        function renderCurve() {
+            const svg = document.getElementById('curve-svg'); const info = document.getElementById('curve-info'); 
+            svg.querySelectorAll('.curve-point-group').forEach(g => g.remove());
+            DATA.stages.forEach(function(p, i) {
+                const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                g.setAttribute('class', 'curve-point-group cursor-pointer');
+                g.onclick = () => { curveIndex = i; renderCurve(); };
+                const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                c.setAttribute('cx', p.x); c.setAttribute('cy', p.y);
+                c.setAttribute('r', curveIndex === i ? '42' : '22');
+                c.setAttribute('fill', curveIndex === i ? '#1DC2BB' : '#C2C2C2');
+                g.appendChild(c);
+                const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                t.setAttribute('x', p.x); t.setAttribute('y', p.y - 65);
+                t.setAttribute('text-anchor', 'middle'); t.setAttribute('class', 'font-bold');
+                t.setAttribute('font-size', curveIndex === i ? '30px' : '18px');
+                t.setAttribute('fill', curveIndex === i ? '#FCED1E' : '#E6E6E6');
+                t.textContent = p.name.toUpperCase();
+                g.appendChild(t); svg.appendChild(g);
+            });
+            const current = DATA.stages[curveIndex];
+            info.innerHTML = `<div><div class="flex items-center gap-4 mb-4"><span class="h-[1px] w-16 bg-aqua"></span><h3 class="font-bold text-yellow uppercase">${current.name}</h3></div><p class="text-white italic" style="font-size: clamp(18px, 2vw, 28px);">${current.truth}</p></div><div class="pt-6 mt-6 border-t border-white/10 flex justify-between items-center text-xs opacity-40 uppercase"><span>From → <span class="text-aqua font-bold">${current.articleTitle}</span></span><span>— ${current.author}</span></div>`;
+        }
+
+        function renderCards(role) {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+            DATA.shareCards[role].cards.forEach(function(card) {
+                const div = document.createElement('div');
+                div.className = "group relative p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-aqua/5 transition-all flex flex-col justify-between";
+                
+                let consultantMoveHtml = '';
+                if (role === 'Consultant') {
+                    consultantMoveHtml = `
+                    <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+                      <span style="font-family: Montserrat, sans-serif; font-size: clamp(13px, 1.3vw, 18px); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #1DC2BB; margin-right: 8px;">NEXT MOVE →</span>
+                      <span style="font-family: Montserrat, sans-serif; font-size: clamp(13px, 1.3vw, 18px); color: #E6E6E6; font-style: italic; line-height: 1.5;">Bring this to your account lead or APL. You've already done the hard part.</span>
+                    </div>`;
+                }
+
+                div.innerHTML = `
+                    <div>
+                        <p class="brand-label mb-4">${DATA.shareCards[role].prefix}</p>
+                        <h3 class="font-bold italic text-white mb-6" style="font-size: clamp(15px, 1.6vw, 22px);">"${card.quote}"</h3>
+                    </div>
+                    <div class="pt-4 border-t border-white/10">
+                        <p class="text-white">
+                            <span class="brand-label mr-2">SHARE →</span>
+                            <span class="font-bold underline decoration-aqua/40" style="font-size: clamp(13px, 1.3vw, 18px);">${card.article}</span>
+                            <span style="font-size: clamp(13px, 1.3vw, 18px); color: #C2C2C2; margin-left: 6px;">— ${card.hook}</span>
+                        </p>
+                        <div style="margin-top: 16px;">
+                          <span style="font-family: Montserrat, sans-serif; font-size: clamp(13px, 1.3vw, 18px); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #1DC2BB; margin-right: 8px;">THEN ASK →</span>
+                          <span style="font-family: Montserrat, sans-serif; font-size: clamp(13px, 1.3vw, 18px); color: white; font-style: italic; line-height: 1.5;">"${card.thenAsk}"</span>
+                        </div>
+                        ${consultantMoveHtml}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function setRole(role) {
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                if (btn.textContent === role) { btn.classList.add('btn-primary'); btn.classList.remove('btn-secondary'); } 
+                else { btn.classList.remove('btn-primary'); btn.classList.add('btn-secondary'); }
+            });
+            renderCards(role);
+        }
+
+        function toggleVideo() { const v = document.getElementById('intro-video'); v.classList.toggle('hidden'); if(!v.classList.contains('hidden')) v.play(); }
+        window.onload = function() { renderCurve(); setRole('Business Development'); renderMeter(); };
+        function nextCurve() { curveIndex = (curveIndex + 1) % DATA.stages.length; renderCurve(); }
+        function prevCurve() { curveIndex = (curveIndex - 1 + DATA.stages.length) % DATA.stages.length; renderCurve(); }
+    </script>
+</body>
+</html>
